@@ -1,0 +1,13 @@
+namespace: default
+
+replicas: 1
+
+image:
+  repository: aline-user-microservice
+  tag: latest
+
+port: 8070
+
+secrets:
+  JWT_SECRET_KEY: dPYRdGOEoOCOu700D0oFmYE6ek8hvXmQUM0gFkehJtAfm1I1lYYxGMbTr0mzzAWt
+  ENCRYPT_SECRET_KEY: eEBYZtMG1s5oZKmAduUn1iWp8MAeYO0n19qw4WojvM1qv0p27fYbuSg1UViwdeCi

@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+
+kind: Deployment
+
+metadata:
+  namespace: {{ .Values.namespace }}
+  name: {{ .Release.Name }}
+  labels:
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
+    app: {{ .Release.Name }}
+    service: backend
+
+spec:
+  replicas: {{ .Values.replicas }}
+  strategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}
+      service: backend
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}
+        service: backend
+    spec:
+      # imagePullSecrets:
+      #   - name: regcred
+      containers:
+        - name: {{ .Release.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          # image: "022185864768.dkr.ecr.us-east-1.amazonaws.com/krushilnaik/{{ required "serviceName missing" .Values.serviceName }}:{{ .Values.version }}"
+          imagePullPolicy: IfNotPresent
+          # resources: {{- toYaml .Values.resources | nindent 12 }}
+          ports:
+            - containerPort: {{ .Values.port }}
+          env:
+            - name: APP_PORT
+              value: {{ .Values.port | quote }}
+            - name: JWT_SECRET_KEY
+              value: {{ .Values.secrets.JWT_SECRET_KEY }}
+            - name: ENCRYPT_SECRET_KEY
+              value: {{ .Values.secrets.ENCRYPT_SECRET_KEY }}
+            # - name: DB_PORT
+            #   value: {{ .Values.secrets.DB_PORT | quote }}
+          # envFrom:
+          #   - secretRef:
+          #       name: aline-secrets
