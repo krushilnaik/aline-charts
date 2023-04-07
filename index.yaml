@@ -3,12 +3,12 @@ entries:
   aline-financial:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2023-04-07T19:23:48.9402743-04:00"
+    created: "2023-04-07T19:57:40.864318-04:00"
     description: A Helm chart for Kubernetes
-    digest: 9d2f64de0e2336531b4157df79bde0569258ee077139b99d890238fd840ac1de
+    digest: e1e03831d068fd2551fb495e597400848abd9084c9229dc053735a226b61782a
     name: aline-financial
     type: application
     urls:
     - aline-financial-0.1.0.tgz
     version: 0.1.0
-generated: "2023-04-07T19:23:48.9397157-04:00"
+generated: "2023-04-07T19:57:40.864318-04:00"
