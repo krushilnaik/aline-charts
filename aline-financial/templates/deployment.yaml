@@ -24,14 +24,10 @@ spec:
         app: {{ .Release.Name }}
         service: backend
     spec:
-      # imagePullSecrets:
-      #   - name: regcred
       containers:
         - name: {{ .Release.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-          # image: "022185864768.dkr.ecr.us-east-1.amazonaws.com/krushilnaik/{{ required "serviceName missing" .Values.serviceName }}:{{ .Values.version }}"
           imagePullPolicy: IfNotPresent
-          # resources: {{- toYaml .Values.resources | nindent 12 }}
           ports:
             - containerPort: {{ .Values.port }}
           env:
@@ -41,8 +37,3 @@ spec:
               value: {{ .Values.secrets.JWT_SECRET_KEY }}
             - name: ENCRYPT_SECRET_KEY
               value: {{ .Values.secrets.ENCRYPT_SECRET_KEY }}
-            # - name: DB_PORT
-            #   value: {{ .Values.secrets.DB_PORT | quote }}
-          # envFrom:
-          #   - secretRef:
-          #       name: aline-secrets
