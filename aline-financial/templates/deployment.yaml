@@ -34,9 +34,9 @@ spec:
             - name: APP_PORT
               value: {{ .Values.port | quote }}
             - name: JWT_SECRET_KEY
-              value: {{ .Values.secrets.JWT_SECRET_KEY }}
+              value: tlsqiBlr64jo29rNFf5gx1SXXMCMLBTFkcI0YaNoaHUSOrULaJg2R96uUvfznA2w
             - name: ENCRYPT_SECRET_KEY
-              value: {{ .Values.secrets.ENCRYPT_SECRET_KEY }}
+              value: auF6CtvFD7W60WVWPFxhOToPR2ceLSEG4ifC8E18yMg81SGJvKaPs8v0daih84e7
             - name: DB_HOST
               value: mysql
             - name: DB_USERNAME
@@ -45,3 +45,6 @@ spec:
               value: test1234
             - name: DB_PORT
               value: "3306"
+            - name: DB_NAME
+              value: alinedb
+  
