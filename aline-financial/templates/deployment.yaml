@@ -34,7 +34,7 @@ spec:
             - name: ENCRYPT_SECRET_KEY
               value: {{ $.Values.secrets.ENCRYPT_SECRET_KEY }}
             - name: DB_HOST
-              value: mysql
+              value: mysql-headless
             - name: DB_USERNAME
               value: krushil
             - name: DB_PASSWORD
