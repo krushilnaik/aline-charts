@@ -37,3 +37,11 @@ spec:
               value: {{ .Values.secrets.JWT_SECRET_KEY }}
             - name: ENCRYPT_SECRET_KEY
               value: {{ .Values.secrets.ENCRYPT_SECRET_KEY }}
+            - name: DB_HOST
+              value: mysql
+            - name: DB_USERNAME
+              value: krushil
+            - name: DB_PASSWORD
+              value: test1234
+            - name: DB_PORT
+              value: "3306"
