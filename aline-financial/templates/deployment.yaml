@@ -2,26 +2,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: {{ $.Values.namespace }}
-  name: {{ $.Release.Name }}
+  namespace: {{ $.Values.namespace | default "default" }}
+  name: {{ .name }}
   labels:
     chart: "{{ $.Chart.Name }}-{{ $.Chart.Version | replace "+" "_" }}"
-    app: {{ $.Release.Name }}
+    app: {{ .name }}
     service: backend
 spec:
   replicas: {{ $.Values.replicas }}
   selector:
     matchLabels:
-      app: {{ $.Release.Name }}
+      app: {{ .name }}
       service: backend
   template:
     metadata:
       labels:
-        app: {{ $.Release.Name }}
+        app: {{ .name }}
         service: backend
     spec:
       containers:
-        - name: {{ $.Release.Name }}
+        - name: {{ .name }}
           image: "{{ .image.repository }}:{{ .image.tag }}"
           imagePullPolicy: IfNotPresent
           ports:
@@ -47,7 +47,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ $.Release.Name }}
+  name: {{ .name }}
   labels:
     chart: "{{ $.Chart.Name }}-{{ $.Chart.Version | replace "+" "_" }}"
 spec:
@@ -55,7 +55,7 @@ spec:
   - port: {{ .port }}
     targetPort: {{ .port }}
     protocol: TCP
-    name: {{ $.Release.Name }}-port
+    name: {{ .name }}-port
   selector:
-    app: {{ $.Release.Name }}
+    app: {{ .name }}
 {{- end }}
