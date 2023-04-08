@@ -1,42 +1,38 @@
+{{- range .Values.microservices }}
 apiVersion: apps/v1
-
 kind: Deployment
-
 metadata:
-  namespace: {{ .Values.namespace }}
-  name: {{ .Release.Name }}
+  namespace: {{ $.Values.namespace }}
+  name: {{ $.Release.Name }}
   labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
-    app: {{ .Release.Name }}
+    chart: "{{ $.Chart.Name }}-{{ $.Chart.Version | replace "+" "_" }}"
+    app: {{ $.Release.Name }}
     service: backend
-
 spec:
-  replicas: {{ .Values.replicas }}
-  strategy:
-    type: RollingUpdate
+  replicas: {{ $.Values.replicas }}
   selector:
     matchLabels:
-      app: {{ .Release.Name }}
+      app: {{ $.Release.Name }}
       service: backend
   template:
     metadata:
       labels:
-        app: {{ .Release.Name }}
+        app: {{ $.Release.Name }}
         service: backend
     spec:
       containers:
-        - name: {{ .Release.Name }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        - name: {{ $.Release.Name }}
+          image: "{{ .image.repository }}:{{ .image.tag }}"
           imagePullPolicy: IfNotPresent
           ports:
-            - containerPort: {{ .Values.port }}
+            - containerPort: {{ .port }}
           env:
             - name: APP_PORT
-              value: {{ .Values.port | quote }}
+              value: {{ .port | quote }}
             - name: JWT_SECRET_KEY
-              value: tlsqiBlr64jo29rNFf5gx1SXXMCMLBTFkcI0YaNoaHUSOrULaJg2R96uUvfznA2w
+              value: {{ $.Values.secrets.JWT_SECRET_KEY }}
             - name: ENCRYPT_SECRET_KEY
-              value: auF6CtvFD7W60WVWPFxhOToPR2ceLSEG4ifC8E18yMg81SGJvKaPs8v0daih84e7
+              value: {{ $.Values.secrets.ENCRYPT_SECRET_KEY }}
             - name: DB_HOST
               value: mysql
             - name: DB_USERNAME
@@ -47,4 +43,19 @@ spec:
               value: "3306"
             - name: DB_NAME
               value: alinedb
-  
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $.Release.Name }}
+  labels:
+    chart: "{{ $.Chart.Name }}-{{ $.Chart.Version | replace "+" "_" }}"
+spec:
+  ports:
+  - port: {{ .port }}
+    targetPort: {{ .port }}
+    protocol: TCP
+    name: {{ $.Release.Name }}-port
+  selector:
+    app: {{ $.Release.Name }}
+{{- end }}
