@@ -1,24 +1,21 @@
-{{- range .Values.microservices }}
+{{- range .Values.microservices.backend }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   namespace: {{ $.Values.namespace | default "default" }}
   name: {{ .name }}
   labels:
-    chart: "{{ $.Chart.Name }}-{{ $.Chart.Version | replace "+" "_" }}"
+    release: {{ $.Release.Name }}
     app: {{ .name }}
-    service: backend
 spec:
   replicas: {{ $.Values.replicas }}
   selector:
     matchLabels:
       app: {{ .name }}
-      service: backend
   template:
     metadata:
       labels:
         app: {{ .name }}
-        service: backend
     spec:
       containers:
         - name: {{ .name }}
@@ -34,15 +31,16 @@ spec:
             - name: ENCRYPT_SECRET_KEY
               value: {{ $.Values.secrets.ENCRYPT_SECRET_KEY }}
             - name: DB_HOST
-              value: mysql-headless
+              value: {{ $.Values.dbCredentials.host }}
             - name: DB_USERNAME
-              value: krushil
+              value: {{ $.Values.dbCredentials.username }}
             - name: DB_PASSWORD
-              value: test1234
+              value: {{ $.Values.dbCredentials.password }}
             - name: DB_PORT
-              value: "3306"
+              value: {{ $.Values.dbCredentials.port | default "3306" | quote }}
             - name: DB_NAME
-              value: alinedb
+              value: {{ $.Values.dbCredentials.database }}
+
 ---
 apiVersion: v1
 kind: Service

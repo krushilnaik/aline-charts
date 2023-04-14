@@ -1,0 +1,31 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: 
+  labels:
+    app: {{ .Release.Name }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
+    release: "{{ .Release.Name }}"
+spec:
+  rules:
+    - host: api.alinefinancial.com
+      http:
+        paths:
+          - path: /api
+            backend:
+              service:
+                name: {{ .Release.Name }}-gateway
+                port:
+                  number: 80
+  {{- range .Values.microservices.frontend }}
+    - host: {{ .endpoint }}
+      http:
+        paths:
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: {{ .name }}
+                port:
+                  number: 80
+  {{ end -}}
